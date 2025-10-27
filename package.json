@@ -1,19 +1,17 @@
 {
     "name": "itertest",
     "version": "1.0.0",
-    "main": "index.js",
+    "main": "dist/cli.js",
     "scripts": {
         "build": "tsc",
         "lint": "eslint . --ext .ts",
-        "test": "node --inspect=9229 ./node_modules/jest/bin/jest.js --runInBand --detectOpenHandles",
-        "prepare": "npm run build"
+        "test": "node --inspect=9229 ./node_modules/jest/bin/jest.js --runInBand --detectOpenHandles"
     },
     "keywords": [
-        "json",
-        "schema",
-        "diff",
-        "compare",
-        "typescript"
+        "ab",
+        "a/b",
+        "testing",
+        "iterative"
     ],
     "author": "Kyle Richardson",
     "license": "MIT",

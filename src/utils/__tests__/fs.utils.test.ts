@@ -14,13 +14,6 @@ describe("fs.utils", () => {
             expect(testPath).toBe(fsUtils.createTestDirPath(testName));
             fs.rmdirSync(fsUtils.createTestDirPath(testName));
         });
-
-        it("should throw if test exists", () => {
-            const testName = "i-exist";
-            fsUtils.initializeTest(testName);
-            expect(() => fsUtils.initializeTest(testName)).toThrow();
-            fs.rmdirSync(fsUtils.createTestDirPath(testName));
-        });
     });
 
     describe("incrementTest", () => {

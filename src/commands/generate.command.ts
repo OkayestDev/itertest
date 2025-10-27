@@ -1,7 +1,19 @@
 import { Command } from "commander";
 import { Commands } from "../constants/enums";
+import { PROGRAM_NAME } from "../constants/constants";
+import { generateGraph } from "../utils/graph.utils";
+import * as fsUtils from "../utils/fs.utils";
 
-export function generateController() {}
+export function generateController() {
+    const config = fsUtils.readConfig();
+    if (!config.testName) {
+        throw new Error(
+            `Test name is not set. Initiate/select a test with \`${PROGRAM_NAME} ${Commands.Select} <test-name>\``,
+        );
+    }
+    const resultFilePath = generateGraph(config.testName);
+    console.log(`Test results generated at \`${resultFilePath}\``);
+}
 
 export function generate(program: Command) {
     return program

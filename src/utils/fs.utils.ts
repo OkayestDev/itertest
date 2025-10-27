@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import { CONFIG_FILE, TEST_DIR } from "../constants/constants";
 import { Config } from "../types/config";
+import path from "path";
 
 export const createTestDirPath = (testName: string): string => `${TEST_DIR}/${testName}`;
 
@@ -12,11 +13,9 @@ export function conditionallyInitializeTestDir() {
 
 export function initializeTest(testName: string): string {
     const testDir = createTestDirPath(testName);
-    if (fs.existsSync(testDir)) {
-        throw new Error(`Test ${testName} already exists`);
+    if (!fs.existsSync(testDir)) {
+        fs.mkdirSync(testDir);
     }
-
-    fs.mkdirSync(testDir);
     return testDir;
 }
 
@@ -26,7 +25,8 @@ export function listTests() {
 
 export function listTestIterations(testName: string) {
     const testDir = createTestDirPath(testName);
-    return fs.readdirSync(testDir);
+    const iterationFiles = fs.readdirSync(testDir);
+    return iterationFiles.map((file) => path.join(testDir, file));
 }
 
 export function incrementTest(testName: string, jsonFilePath: string): string {
