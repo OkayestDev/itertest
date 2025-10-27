@@ -1,3 +1,4 @@
 node_modules
 itertests
-jest-iterations
+__jest-iterations
+dist

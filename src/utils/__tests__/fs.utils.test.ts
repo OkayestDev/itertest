@@ -9,10 +9,30 @@ describe("fs.utils", () => {
     describe("initializeTest", () => {
         it("should create a new test directory", () => {
             const testName = "test";
-            fsUtils.initializeTest(testName);
-            expect(fs.existsSync(fsUtils.createTestDir(testName))).toBe(true);
+            const testPath = fsUtils.initializeTest(testName);
+            expect(fs.existsSync(fsUtils.createTestDirPath(testName))).toBe(true);
+            expect(testPath).toBe(fsUtils.createTestDirPath(testName));
+            fs.rmdirSync(fsUtils.createTestDirPath(testName));
+        });
 
-            fs.unlinkSync(fsUtils.createTestDir(testName));
+        it("should throw if test exists", () => {
+            const testName = "i-exist";
+            fsUtils.initializeTest(testName);
+            expect(() => fsUtils.initializeTest(testName)).toThrow();
+            fs.rmdirSync(fsUtils.createTestDirPath(testName));
+        });
+    });
+
+    describe("incrementTest", () => {
+        it("should increment the test iteration", () => {
+            const testName = "test";
+            const testPath = fsUtils.initializeTest(testName);
+            const iterationPath = fsUtils.incrementTest(testName, testPath);
+            expect(iterationPath).toBe(`${fsUtils.createTestDirPath(testName)}/iteration-1.json`);
+            fs.rmSync(fsUtils.createTestDirPath(testName), {
+                recursive: true,
+                force: true,
+            });
         });
     });
 });
