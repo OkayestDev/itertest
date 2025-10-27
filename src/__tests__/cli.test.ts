@@ -94,4 +94,24 @@ describe("cli", () => {
             ).toEqual(jsonFixture2);
         });
     });
+
+    describe("generate", () => {
+        it("generates graphs from iterations", () => {
+            program.parse(["node", "itertest", "select", TEST_NAME]);
+            program.parse([
+                "node",
+                "itertest",
+                "add",
+                `${__dirname}/__fixtures__/json-schema-1.json`,
+            ]);
+            program.parse([
+                "node",
+                "itertest",
+                "add",
+                `${__dirname}/__fixtures__/json-schema-2.json`,
+            ]);
+            program.parse(["node", "itertest", "generate"]);
+            expect(fs.existsSync(`${fsUtils.createTestDirPath(TEST_NAME)}/result.html`)).toBe(true);
+        });
+    });
 });

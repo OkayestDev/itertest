@@ -26,7 +26,9 @@ export function listTests() {
 export function listTestIterations(testName: string) {
     const testDir = createTestDirPath(testName);
     const iterationFiles = fs.readdirSync(testDir);
-    return iterationFiles.map((file) => path.join(testDir, file));
+    return iterationFiles
+        .map((file) => path.join(testDir, file))
+        .filter((i) => i.endsWith(".json"));
 }
 
 export function incrementTest(testName: string, jsonFilePath: string): string {
