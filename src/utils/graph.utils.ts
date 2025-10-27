@@ -3,26 +3,20 @@ import * as fsUtils from "./fs.utils";
 import { getScalarPaths, readPath } from "./json.utils";
 import { peek } from "./array.utils";
 
-const data = [
-    {
-        x: ["Jan", "Feb", "Mar", "Apr"],
-        y: [10, 20, 15, 25],
-        type: "scatter", // line graph
-        mode: "lines+markers",
-        name: "Sales",
-    },
-];
+const PLOTLY_VERSION = "3.1.2";
 
 const GRAPH_TEMPLATE = `<div id="{{id}}"></div>
     <script>
-      const data = {{data}};
-      const layout = {{layout}};
-      Plotly.newPlot('{{id}}', data, layout);
+      Plotly.newPlot(
+        document.getElementById('{{id}}'), 
+        [{{data}}], 
+        {{layout}}
+      );
     </script>`;
 
 const HTML_TEMPLATE = `<html>
   <head>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-${PLOTLY_VERSION}.min.js"></script>
   </head>
   <body>
     {{graphTemplates}}
@@ -64,7 +58,14 @@ export function renderGraphs(scalarPaths: string[], iterations: string[]): strin
         graphs.push(
             GRAPH_TEMPLATE.replaceAll("{{id}}", scalar)
                 .replaceAll("{{data}}", JSON.stringify(constructedData))
-                .replaceAll("{{layout}}", JSON.stringify({ title: peek(scalar.split(".")) })),
+                .replaceAll(
+                    "{{layout}}",
+                    JSON.stringify({
+                        title: {
+                            text: peek(scalar.split(".")),
+                        },
+                    }),
+                ),
         );
     }
 

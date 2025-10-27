@@ -8,16 +8,14 @@ import { config } from "./commands/config.command";
 import { generate } from "./commands/generate.command";
 import { PROGRAM_NAME } from "./constants/constants";
 
-export const program = new Command();
+export const program = new Command()
+    .name(PROGRAM_NAME)
+    .description("Compare JSON schema changes for improvements or regressions")
+    .version("1.0.0");
 
 conditionallyInitializeTestDir();
 
 const commands = [select, add, list, config, generate];
-
-program
-    .name(PROGRAM_NAME)
-    .description("Compare JSON schema changes for improvements or regressions")
-    .version("1.0.0");
 
 commands.forEach((command) => command(program));
 

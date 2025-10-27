@@ -1,3 +1,4 @@
 {
-    "run-time": 15
+    "run-time": 15,
+    "requests": 100
 }
