@@ -12,7 +12,7 @@
         "itertest": "dist/cli.js"
     },
     "scripts": {
-        "publish": "npm run build && npm publish",
+        "publish:latest": "npm run build && npm publish",
         "build": "tsc",
         "lint": "eslint . --ext .ts",
         "test": "node --inspect=9229 ./node_modules/jest/bin/jest.js --runInBand --detectOpenHandles"
