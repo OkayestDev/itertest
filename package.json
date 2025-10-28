@@ -1,13 +1,18 @@
 {
     "name": "itertest",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "main": "dist/cli.js",
     "description": "cli tool to quickly build html charts using Plotly.js from json files",
     "type": "commonjs",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/OkayestDev/itertest.git"
+    },
     "bin": {
         "itertest": "dist/cli.js"
     },
     "scripts": {
+        "publish": "npm run build && npm publish",
         "build": "tsc",
         "lint": "eslint . --ext .ts",
         "test": "node --inspect=9229 ./node_modules/jest/bin/jest.js --runInBand --detectOpenHandles"

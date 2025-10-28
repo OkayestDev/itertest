@@ -58,3 +58,9 @@ Graphs are generated after each add. Optionally you can regenerate the graph
     > Generates plotly.js html file (path printed to console) of test iterations
 - help
     > Prints itertest commands
+
+### Example
+
+- [JSON test iterations](./example/json-iterations)
+- [Create & adding iterations](./example/itertest-example.ps1)
+- [Resulting html file](./example/result.html)
