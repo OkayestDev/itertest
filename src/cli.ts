@@ -7,11 +7,12 @@ import { list } from "./commands/list.command";
 import { config } from "./commands/config.command";
 import { generate } from "./commands/generate.command";
 import { PROGRAM_NAME } from "./constants/constants";
+const packageJson = require("../package.json");
 
 export const program = new Command()
     .name(PROGRAM_NAME)
     .description("Compare JSON schema changes for improvements or regressions")
-    .version("0.0.1");
+    .version(packageJson.version);
 
 conditionallyInitializeTestDir();
 
