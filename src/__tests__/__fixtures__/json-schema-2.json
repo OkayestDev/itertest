@@ -1,4 +1,5 @@
 {
     "run-time": 7,
-    "requests": 120
+    "requests": 120,
+    "request-rate": "17/s"
 }

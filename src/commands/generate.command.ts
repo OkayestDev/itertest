@@ -11,7 +11,7 @@ export function generateController() {
             `Test name is not set. Initiate/select a test with \`${PROGRAM_NAME} ${Commands.Select} <test-name>\``,
         );
     }
-    const resultFilePath = generateGraph(config.testName);
+    const resultFilePath = generateGraph(config.testName, config);
     console.log(`Test results generated at \`${resultFilePath}\``);
 }
 

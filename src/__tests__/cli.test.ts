@@ -97,7 +97,13 @@ describe("cli", () => {
 
     describe("generate", () => {
         it("generates graphs from iterations", () => {
-            program.parse(["node", "itertest", "select", TEST_NAME]);
+            program.parse([
+                "node",
+                "itertest",
+                "select",
+                TEST_NAME,
+                `${__dirname}/__fixtures__/custom-config.ts`,
+            ]);
             program.parse([
                 "node",
                 "itertest",

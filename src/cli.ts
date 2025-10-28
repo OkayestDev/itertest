@@ -11,7 +11,7 @@ import { PROGRAM_NAME } from "./constants/constants";
 export const program = new Command()
     .name(PROGRAM_NAME)
     .description("Compare JSON schema changes for improvements or regressions")
-    .version("1.0.0");
+    .version("0.0.1");
 
 conditionallyInitializeTestDir();
 

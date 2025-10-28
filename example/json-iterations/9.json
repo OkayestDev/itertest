@@ -1,0 +1,9 @@
+{
+    "test_run": 9,
+    "vus": 300,
+    "duration": "3m",
+    "requests_per_second": 1410,
+    "avg_response_time_ms": 115,
+    "p95_response_time_ms": 210,
+    "error_rate": 0.6
+}

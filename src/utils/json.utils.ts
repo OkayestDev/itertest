@@ -1,4 +1,10 @@
-export function getScalarPaths(obj: Record<any, any>, parentKey = ""): string[] {
+import { CustomConfig } from "../types/custom-config.type";
+
+export function getScalarPaths(
+    customConfig: CustomConfig,
+    obj: Record<any, any>,
+    parentKey = "",
+): string[] {
     const paths = [];
 
     for (const key in obj) {
@@ -7,10 +13,13 @@ export function getScalarPaths(obj: Record<any, any>, parentKey = ""): string[] 
         const value = obj[key];
         const fullPath = parentKey ? `${parentKey}.${key}` : key;
 
-        if (typeof value === "number") {
+        if (typeof value === "number" || customConfig?.[key]?.parser) {
             paths.push(fullPath);
-        } else if (typeof value === "object" && !Array.isArray(value)) {
-            paths.push(...getScalarPaths(value, fullPath));
+            continue;
+        }
+
+        if (typeof value === "object" && !Array.isArray(value)) {
+            paths.push(...getScalarPaths(customConfig, value, fullPath));
         }
     }
 

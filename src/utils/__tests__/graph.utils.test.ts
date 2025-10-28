@@ -14,7 +14,7 @@ describe("graph.utils", () => {
             TEST_NAME,
             `${__dirname}/../../__tests__/__fixtures__/json-schema-2.json`,
         );
-        const htmlFilePath = generateGraph(TEST_NAME) as string;
+        const htmlFilePath = generateGraph(TEST_NAME, {}) as string;
         expect(htmlFilePath).toBeDefined();
         expect(fs.existsSync(htmlFilePath)).toBe(true);
         fs.rmSync(testDir, { recursive: true, force: true });

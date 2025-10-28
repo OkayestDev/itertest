@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import { CONFIG_FILE, TEST_DIR } from "../constants/constants";
-import { Config } from "../types/config";
+import { Config } from "../types/config.type";
 import path from "path";
 
 export const createTestDirPath = (testName: string): string => `${TEST_DIR}/${testName}`;

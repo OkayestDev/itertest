@@ -4,7 +4,7 @@ describe("json.utils", () => {
     describe("getScalarPaths", () => {
         it("should get scalar paths", () => {
             const obj = { a: 1, b: "string", c: { d: 5 } };
-            const paths = getScalarPaths(obj);
+            const paths = getScalarPaths({}, obj);
             expect(paths).toEqual(["a", "c.d"]);
         });
     });
