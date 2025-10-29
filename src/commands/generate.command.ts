@@ -6,12 +6,12 @@ import * as fsUtils from "../utils/fs.utils";
 
 export function generateController() {
     const config = fsUtils.readConfig();
-    if (!config.testName) {
+    if (!config.selectedTest) {
         throw new Error(
             `Test name is not set. Initiate/select a test with \`${PROGRAM_NAME} ${Commands.Select} <test-name>\``,
         );
     }
-    const resultFilePath = generateGraph(config.testName, config);
+    const resultFilePath = generateGraph(config.selectedTest, config);
     console.log(`Test results generated at \`${resultFilePath}\``);
 }
 

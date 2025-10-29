@@ -9,7 +9,9 @@ describe("fs.utils", () => {
     });
 
     afterEach(() => {
-        fs.rmSync(fsUtils.createTestDirPath(TEST_NAME), { recursive: true });
+        try {
+            fs.rmSync(fsUtils.createTestDirPath(TEST_NAME), { recursive: true });
+        } catch {}
     });
 
     describe("initializeTest", () => {
@@ -28,6 +30,15 @@ describe("fs.utils", () => {
                 `${__dirname}/../../__tests__/__fixtures__/json-schema-1.json`,
             );
             expect(iterationPath).toBe(`${fsUtils.createTestDirPath(TEST_NAME)}/iteration-1.json`);
+        });
+    });
+
+    describe("getIterationIndex", () => {
+        it("should return the index of the iteration", () => {
+            const index = fsUtils.getIterationIndex(
+                `${fsUtils.createTestDirPath(TEST_NAME)}/iteration-1.json`,
+            );
+            expect(index).toBe(1);
         });
     });
 });

@@ -7,6 +7,7 @@ import { list } from "./commands/list.command";
 import { config } from "./commands/config.command";
 import { generate } from "./commands/generate.command";
 import { PROGRAM_NAME } from "./constants/constants";
+import { iterations } from "./commands/iterations.command";
 const packageJson = require("../package.json");
 
 export const program = new Command()
@@ -16,7 +17,7 @@ export const program = new Command()
 
 conditionallyInitializeTestDir();
 
-const commands = [select, add, list, config, generate];
+const commands = [select, add, list, config, generate, iterations];
 
 commands.forEach((command) => command(program));
 

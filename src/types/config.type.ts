@@ -1,4 +1,4 @@
 export type Config = {
-    testName: string;
+    selectedTest: string;
     customConfigFile?: string;
 };

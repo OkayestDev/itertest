@@ -16,6 +16,7 @@ describe("cli", () => {
             recursive: true,
             force: true,
         });
+        jest.resetAllMocks();
     });
 
     describe("select", () => {
@@ -27,13 +28,13 @@ describe("cli", () => {
         it("should update config if test exists", () => {
             program.parse(["node", "itertest", "select", TEST_NAME]);
             let config = fsUtils.readConfig();
-            expect(config.testName).toBe(TEST_NAME);
+            expect(config.selectedTest).toBe(TEST_NAME);
             program.parse(["node", "itertest", "select", "test-2"]);
             config = fsUtils.readConfig();
-            expect(config.testName).toBe("test-2");
+            expect(config.selectedTest).toBe("test-2");
             program.parse(["node", "itertest", "select", TEST_NAME]);
             config = fsUtils.readConfig();
-            expect(config.testName).toBe(TEST_NAME);
+            expect(config.selectedTest).toBe(TEST_NAME);
             fs.rmdirSync(fsUtils.createTestDirPath("test-2"));
         });
     });
@@ -46,7 +47,7 @@ describe("cli", () => {
             expect(logSpy).toHaveBeenCalledWith(
                 JSON.stringify(
                     {
-                        testName: TEST_NAME,
+                        selectedTest: TEST_NAME,
                     },
                     null,
                     4,
@@ -118,6 +119,29 @@ describe("cli", () => {
             ]);
             program.parse(["node", "itertest", "generate"]);
             expect(fs.existsSync(`${fsUtils.createTestDirPath(TEST_NAME)}/result.html`)).toBe(true);
+        });
+    });
+
+    describe("iterations", () => {
+        it("lists iterations of currently selected test", () => {
+            const logSpy = jest.spyOn(console, "log");
+            program.parse(["node", "itertest", "select", TEST_NAME]);
+            program.parse([
+                "node",
+                "itertest",
+                "add",
+                `${__dirname}/__fixtures__/json-schema-1.json`,
+            ]);
+            program.parse([
+                "node",
+                "itertest",
+                "add",
+                `${__dirname}/__fixtures__/json-schema-2.json`,
+            ]);
+            program.parse(["node", "itertest", "iterations"]);
+            const lastCall = logSpy?.mock?.calls?.[logSpy?.mock?.calls?.length - 1];
+            expect(lastCall[0].includes("iteration-1")).toBe(true);
+            expect(lastCall[0].includes("iteration-2")).toBe(true);
         });
     });
 });

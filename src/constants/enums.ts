@@ -1,4 +1,5 @@
 export enum Commands {
+    Iterations = "iterations",
     Generate = "generate",
     Select = "select",
     Add = "add",

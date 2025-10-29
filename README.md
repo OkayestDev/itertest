@@ -50,6 +50,8 @@ Graphs are generated after each add. Optionally you can regenerate the graph
         ```
 - list
     > List all tests found in your itertest installation
+- iterations
+    > List iterations of the currently selected test
 - config
     > Prints itertest's current config
 - add `<path-to-iteration-json>`

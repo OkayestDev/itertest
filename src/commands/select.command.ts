@@ -27,9 +27,9 @@ function initializeOrSelectTest(name: string) {
 function selectController(name: string, customConfigFile?: string) {
     initializeOrSelectTest(name);
     const resolvedCustomConfigFile = resolveCustomConfigFile(customConfigFile);
-    writeConfig({ testName: name, customConfigFile: resolvedCustomConfigFile });
+    writeConfig({ selectedTest: name, customConfigFile: resolvedCustomConfigFile });
     console.log(
-        `Begin iterative testing by running \`itertest ${Commands.Add} ${name} <path-to-json-file>\``,
+        `Begin iterative testing by running \`itertest ${Commands.Add} <path-to-json-file>\``,
     );
 }
 
