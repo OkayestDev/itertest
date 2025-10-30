@@ -144,4 +144,44 @@ describe("cli", () => {
             expect(lastCall[0].includes("iteration-2")).toBe(true);
         });
     });
+
+    describe("print", () => {
+        it("prints iterations fuzzy matching provided string", () => {
+            const logSpy = jest.spyOn(console, "log");
+            program.parse(["node", "itertest", "select", TEST_NAME]);
+            program.parse([
+                "node",
+                "itertest",
+                "add",
+                `${__dirname}/__fixtures__/json-schema-1.json`,
+            ]);
+            program.parse([
+                "node",
+                "itertest",
+                "add",
+                `${__dirname}/__fixtures__/json-schema-2.json`,
+            ]);
+            program.parse(["node", "itertest", "print", "1"]);
+            const lastCall = logSpy?.mock?.calls?.[logSpy?.mock?.calls?.length - 1];
+            expect(lastCall[0]).toEqual({
+                "iteration-1.json": jsonFixture1,
+            });
+        });
+    });
+
+    describe("del", () => {
+        it("deletes iterations fuzzy matching provided string", () => {
+            program.parse(["node", "itertest", "select", TEST_NAME]);
+            program.parse([
+                "node",
+                "itertest",
+                "add",
+                `${__dirname}/__fixtures__/json-schema-1.json`,
+            ]);
+            program.parse(["node", "itertest", "delete", "1"]);
+            expect(fs.existsSync(`${fsUtils.createTestDirPath(TEST_NAME)}/iteration-1.json`)).toBe(
+                false,
+            );
+        });
+    });
 });

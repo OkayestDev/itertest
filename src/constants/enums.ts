@@ -1,4 +1,6 @@
 export enum Commands {
+    Delete = "delete",
+    Print = "print",
     Iterations = "iterations",
     Generate = "generate",
     Select = "select",

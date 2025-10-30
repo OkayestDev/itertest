@@ -58,6 +58,10 @@ Graphs are generated after each add. Optionally you can regenerate the graph
     > Adds an iteration to the currently selected test
 - generate
     > Generates plotly.js html file (path printed to console) of test iterations
+- print `<search>`
+    > Prints json data of all iterations matching search of the currently selected test
+- delete `<search>`
+    > Delete all iterations matching search of the currently selected test
 - help
     > Prints itertest commands
 

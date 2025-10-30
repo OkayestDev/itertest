@@ -1,6 +1,6 @@
 {
     "name": "itertest",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "main": "dist/cli.js",
     "description": "cli tool to quickly build html charts using Plotly.js from json files",
     "type": "commonjs",
