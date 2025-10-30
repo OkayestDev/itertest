@@ -18,7 +18,8 @@ const GRAPH_TEMPLATE = `<div id="{{id}}" style="height: fit-content;"></div>
       Plotly.newPlot(
         document.getElementById('{{id}}'), 
         [{{data}}], 
-        {{layout}}
+        {{layout}},
+        { responsive: true, displayModeBar: false }
       );
     </script>`;
 
