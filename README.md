@@ -1,6 +1,6 @@
 # Itertest
 
-cli tool to quickly build html charts using (Plotly.js)[https://plotly.com/javascript/] from json files
+cli tool to quickly build html charts using [Plotly.js](https://plotly.com/javascript/) from json files
 
 ### Installation
 
@@ -58,8 +58,8 @@ Graphs are generated after each add. Optionally you can regenerate the graph
     > Adds an iteration to the currently selected test
 - generate
     > Generates plotly.js html file (path printed to console) of test iterations
-- print `<search>`
-    > Prints json data of all iterations matching search of the currently selected test
+- print `[search>]`
+    > Prints json data of all iterations matching search (prints all if no search provided) of the currently selected test
 - delete `<search>`
     > Delete all iterations matching search of the currently selected test
 - help

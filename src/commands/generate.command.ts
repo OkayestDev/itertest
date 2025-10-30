@@ -12,7 +12,9 @@ export function generateController() {
         );
     }
     const resultFilePath = generateGraph(config.selectedTest, config);
-    console.log(`Test results generated at \`${resultFilePath}\``);
+    if (resultFilePath) {
+        console.log(`Test results generated at \`${resultFilePath}\``);
+    }
 }
 
 export function generate(program: Command) {

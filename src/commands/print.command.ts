@@ -8,12 +8,12 @@ import fs from "fs";
 
 export function print(program: Command) {
     return program
-        .command(`${Commands.Print} <search>`)
+        .command(`${Commands.Print} [search]`)
         .description("Print iteration(s) fuzzy matching provided string")
         .action((search) => {
             const config = requiredConfigRead();
             const iterations = fsUtils.listTestIterations(config.selectedTest);
-            const matchingIterations = fuzzyMatchAll(iterations, search);
+            const matchingIterations = search ? fuzzyMatchAll(iterations, search) : iterations;
             matchingIterations.forEach((iteration) => {
                 const jsonData = JSON.parse(fs.readFileSync(iteration, "utf8"));
                 const name = path.basename(iteration);
