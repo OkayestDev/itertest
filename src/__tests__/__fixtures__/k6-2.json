@@ -1,0 +1,7 @@
+{
+    "duration": 12,
+    "metrics": {
+        "p(99.99)": 340
+    },
+    "request-rate": "10/s"
+}

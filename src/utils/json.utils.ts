@@ -1,7 +1,9 @@
-import { CustomConfig } from "../types/custom-config.type";
+import { CustomConfig, CustomConfigOptions } from "../types/custom-config.types";
+import { resolveParseCustomConfigKeysOnly } from "./custom-config.utils";
 
 export function getScalarPaths(
     customConfig: CustomConfig,
+    customConfigOptions: CustomConfigOptions,
     obj: Record<any, any>,
     parentKey = "",
 ): string[] {
@@ -12,18 +14,55 @@ export function getScalarPaths(
 
         const value = obj[key];
         const fullPath = parentKey ? `${parentKey}.${key}` : key;
+        const isNumber = typeof value === "number";
+        const hasParser = customConfig?.[key]?.parser;
+        const parseCustomConfigKeysOnly = resolveParseCustomConfigKeysOnly(customConfigOptions);
+        const allowedToAdd = parseCustomConfigKeysOnly
+            ? hasAnyPathPart(customConfig, fullPath)
+            : true;
 
-        if (typeof value === "number" || customConfig?.[key]?.parser) {
+        if ((isNumber || hasParser) && allowedToAdd) {
             paths.push(fullPath);
             continue;
         }
 
         if (typeof value === "object" && !Array.isArray(value)) {
-            paths.push(...getScalarPaths(customConfig, value, fullPath));
+            paths.push(...getScalarPaths(customConfig, customConfigOptions, value, fullPath));
         }
     }
 
     return paths;
+}
+
+export function hasAnyPathPart(obj: Record<string, any>, path: string): boolean {
+    if (obj == null || typeof obj !== "object") {
+        return false;
+    }
+
+    const parts = path
+        .split(".")
+        .map((p) => p.trim())
+        .filter(Boolean);
+
+    for (let i = parts.length - 1; i >= 0; i--) {
+        const subPath = parts.slice(i).join(".");
+
+        if (Object.prototype.hasOwnProperty.call(obj, subPath)) {
+            return true;
+        }
+    }
+
+    for (const key in obj) {
+        const val = obj[key];
+        if (val && typeof val === "object") {
+            const res = hasAnyPathPart(val, path);
+            if (res) {
+                return res;
+            }
+        }
+    }
+
+    return false;
 }
 
 export function readPath(obj: Record<string, any>, path: string): any {

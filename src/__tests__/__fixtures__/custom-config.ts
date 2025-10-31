@@ -1,4 +1,4 @@
-import { CustomConfig } from "../../types/custom-config.type";
+import { CustomConfig } from "../../types/custom-config.types";
 
 export default {
     requests: {

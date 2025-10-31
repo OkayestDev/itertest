@@ -1,6 +1,6 @@
 import { PROGRAM_NAME } from "../constants/constants";
 import { Commands } from "../constants/enums";
-import { Config } from "../types/config.type";
+import { Config } from "../types/config.types";
 import * as fsUtils from "./fs.utils";
 
 export function requiredConfigRead(): Config | never {

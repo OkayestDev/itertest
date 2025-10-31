@@ -1,10 +1,10 @@
 import fs from "fs";
 import * as fsUtils from "./fs.utils";
 import { getScalarPaths, readPath } from "./json.utils";
-import { peek } from "./array.utils";
-import { Config } from "../types/config.type";
-import { CustomConfig } from "../types/custom-config.type";
+import { Config } from "../types/config.types";
+import { CustomConfig } from "../types/custom-config.types";
 import {
+    customParse,
     resolveCustomConfig,
     resolveGraphMode,
     resolveGraphTitle,
@@ -52,22 +52,18 @@ export function renderGraphs(
     }
 
     for (const scalar in data) {
-        const key = peek(scalar.split("."));
         const constructedData = data[scalar].reduce(
             (acc: { x: number[]; y: number[] }, value: number, index: number) => ({
                 ...acc,
                 x: [...acc.x, index],
-                y: [
-                    ...acc.y,
-                    customConfig?.[key]?.parser ? customConfig?.[key]?.parser(value) : value,
-                ],
+                y: [...acc.y, customParse(customConfig, scalar, value)],
             }),
             {
                 x: [],
                 y: [],
-                type: resolveGraphType(customConfig, key),
-                mode: resolveGraphMode(customConfig, key),
-                name: key,
+                type: resolveGraphType(customConfig, scalar),
+                mode: resolveGraphMode(customConfig, scalar),
+                name: scalar,
             },
         );
 
@@ -78,7 +74,7 @@ export function renderGraphs(
                     "{{layout}}",
                     JSON.stringify({
                         title: {
-                            text: resolveGraphTitle(customConfig, key),
+                            text: resolveGraphTitle(customConfig, scalar),
                         },
                     }),
                 ),
@@ -90,7 +86,7 @@ export function renderGraphs(
 
 export const generateGraph = (testName: string, config: Partial<Config>): string | undefined => {
     const iterations = fsUtils.listTestIterations(testName);
-    const customConfig = resolveCustomConfig(config);
+    const { customConfig, options } = resolveCustomConfig(config);
 
     if (iterations.length < 2) {
         console.log("At least 2 iterations are required to generate a graph");
@@ -98,7 +94,7 @@ export const generateGraph = (testName: string, config: Partial<Config>): string
     }
 
     const iteration1Data = JSON.parse(fs.readFileSync(iterations[0], "utf-8"));
-    const scalarPaths = getScalarPaths(customConfig, iteration1Data);
+    const scalarPaths = getScalarPaths(customConfig, options, iteration1Data);
     const graphs = renderGraphs(customConfig, scalarPaths, iterations);
     const html = HTML_TEMPLATE.replace("{{graphTemplates}}", graphs.join("\n"));
     return fsUtils.writeTestResults(testName, html);

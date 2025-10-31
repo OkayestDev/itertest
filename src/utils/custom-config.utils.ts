@@ -1,26 +1,46 @@
-import { Config } from "../types/config.type";
+import { Config } from "../types/config.types";
 import path from "path";
 import fs from "fs";
-import { CustomConfig } from "../types/custom-config.type";
+import { CustomConfig, CustomConfigOptions } from "../types/custom-config.types";
+import { hasAnyPathPart, readPath } from "./json.utils";
 
-export function resolveCustomConfig(config: Partial<Config>): CustomConfig {
+export function resolveCustomConfig(config: Partial<Config>): {
+    customConfig: CustomConfig;
+    options: CustomConfigOptions;
+} {
     if (config.customConfigFile) {
         if (!fs.existsSync(config.customConfigFile)) {
             throw new Error(`Custom config file "${config.customConfigFile}" not found`);
         }
-        return require(path.resolve(config.customConfigFile)).default as CustomConfig;
+        const req = require(path.resolve(config.customConfigFile));
+        return {
+            customConfig:
+                (require(path.resolve(config.customConfigFile)).default as CustomConfig) || {},
+            options: req.options || {},
+        };
     }
-    return {};
+    return { customConfig: {}, options: {} };
 }
 
+export function customParse(customConfig: CustomConfig, key: string, value: any) {
+    const res = readPath(customConfig, key);
+    return res?.parser ? res.parser(value) : value;
+}
 export function resolveGraphType(customConfig: CustomConfig, key: string) {
-    return customConfig?.[key]?.graphType || "scatter";
+    const res = readPath(customConfig, key);
+    return res?.graphType || "scatter";
 }
 
 export function resolveGraphMode(customConfig: CustomConfig, key: string) {
-    return customConfig?.[key]?.graphMode || "lines+markers";
+    const res = readPath(customConfig, key);
+    return res?.graphMode || "lines+markers";
 }
 
 export function resolveGraphTitle(customConfig: CustomConfig, key: string) {
-    return customConfig?.[key]?.title || key;
+    const res = readPath(customConfig, key);
+    return res?.title || key;
+}
+
+export function resolveParseCustomConfigKeysOnly(customConfigOptions: CustomConfigOptions) {
+    return customConfigOptions?.parseCustomConfigKeysOnly || false;
 }

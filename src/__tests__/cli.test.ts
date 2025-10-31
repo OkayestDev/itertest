@@ -168,4 +168,31 @@ describe("cli", () => {
             );
         });
     });
+
+    describe("custom config w/ options parseCustomConfigKeysOnly happy-path", () => {
+        it("only parses keys that are in the custom config", () => {
+            program.parse([
+                "node",
+                "itertest",
+                "select",
+                TEST_NAME,
+                `${__dirname}/__fixtures__/k6-custom-config.js`,
+            ]);
+            program.parse(["node", "itertest", "add", `${__dirname}/__fixtures__/k6-1.json`]);
+            program.parse(["node", "itertest", "add", `${__dirname}/__fixtures__/k6-2.json`]);
+            program.parse(["node", "itertest", "add", `${__dirname}/__fixtures__/k6-3.json`]);
+            program.parse(["node", "itertest", "generate"]);
+            expect(fs.existsSync(`${fsUtils.createTestDirPath(TEST_NAME)}/result.html`)).toBe(true);
+            const html = fs.readFileSync(
+                `${fsUtils.createTestDirPath(TEST_NAME)}/result.html`,
+                "utf-8",
+            );
+            expect(html).toContain("Metrics p99.99");
+            expect(html).toContain("Requests");
+            expect(html).not.toContain("duration"); // Not included in custom config
+            expect(html).toContain('{"title":{"text":"Requests"}}'); // custom title
+            expect(html).not.toContain('{"title":{"text":"request-rate"}}'); // custom title
+            expect(html.match(/Plotly\.newPlot/g)?.length).toBe(2); // 2 graphs
+        });
+    });
 });

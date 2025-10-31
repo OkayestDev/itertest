@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import { CONFIG_FILE, TEST_DIR } from "../constants/constants";
-import { Config } from "../types/config.type";
+import { Config } from "../types/config.types";
 import path from "path";
 import { peek } from "./array.utils";
 

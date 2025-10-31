@@ -2,6 +2,11 @@
 
 cli tool to quickly build html charts using [Plotly.js](https://plotly.com/javascript/) from json files
 
+Recursively walks through provided JSON, plotting all values if:
+- custom parser provide for value
+- value is a number
+- value exists in custom-config if parseCustomConfigKeysOnly == true
+
 ### Installation
 
 `npm i itertest`
@@ -28,7 +33,7 @@ Graphs are generated after each add. Optionally you can regenerate the graph
 - select `<test-name>` [custom-config-file-path]'
   > selects or initializes a new test
   - `<test-name>` name of test. Once selected, calls to `add` will add iterations to this test
-  - [custom-config-file-path] optional js/ts file containing custom settings for keys in your test iteration json
+  - [custom-config-file-path] optional ts/js file containing custom settings for keys in your test iteration json
     - Example:
       - Iteration json:
         ```json
@@ -38,13 +43,17 @@ Graphs are generated after each add. Optionally you can regenerate the graph
         ```
       - Custom config
         ```ts
-        export default {
-            "request-rate": {
+        module.exports = {
+            default: {
+                 "request-rate": {
                 // Parser MUST return a number
-                parser: (value: string | number) => Number(value.split("/s")[0]),
+                parser: (value) => Number(value.split("/s")[0]),
                 title: "Request Rate",
                 graphType: "bar", // Plotlyjs data.type
                 graphMode: "group", // Plotlyjs data.mode
+            }
+            options: {
+                parseCustomConfigKeysOnly: true | false // If true, only keys in default export will be graphed
             }
         }
         ```
