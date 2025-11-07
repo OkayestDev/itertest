@@ -46,11 +46,14 @@ Graphs are generated after each add. Optionally you can regenerate the graph
         module.exports = {
             default: {
                  "request-rate": {
-                // Parser MUST return a number
-                parser: (value) => Number(value.split("/s")[0]),
-                title: "Request Rate",
-                graphType: "bar", // Plotlyjs data.type
-                graphMode: "group", // Plotlyjs data.mode
+                    // Parser MUST return a number
+                    parser: (value) => Number(value.split("/s")[0]),
+                    title: "Request Rate",
+                    graphType: "bar", // Plotlyjs data.type
+                    graphMode: "group", // Plotlyjs data.mode
+                    groupName: "group-name", // Will group keys with same group-name on graphs
+                    graphColor: "#000000" // Plotted line, bar, etc. color
+                }
             }
             options: {
                 parseCustomConfigKeysOnly: true | false // If true, only keys in default export will be graphed
