@@ -6,6 +6,7 @@ import { CustomConfig } from "../types/custom-config.types";
 import {
     customParse,
     resolveCustomConfig,
+    resolveGraphColors,
     resolveGraphMode,
     resolveGraphTitle,
     resolveGraphType,
@@ -64,6 +65,7 @@ export function renderGraphs(
                 type: resolveGraphType(customConfig, scalar),
                 mode: resolveGraphMode(customConfig, scalar),
                 name: scalar,
+                line: { color: resolveGraphColors(customConfig, scalar) },
             },
         );
 

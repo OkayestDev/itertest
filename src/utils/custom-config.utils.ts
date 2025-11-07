@@ -2,7 +2,7 @@ import { Config } from "../types/config.types";
 import path from "path";
 import fs from "fs";
 import { CustomConfig, CustomConfigOptions } from "../types/custom-config.types";
-import { hasAnyPathPart, readPath } from "./json.utils";
+import { readPath } from "./json.utils";
 
 export function resolveCustomConfig(config: Partial<Config>): {
     customConfig: CustomConfig;
@@ -20,6 +20,15 @@ export function resolveCustomConfig(config: Partial<Config>): {
         };
     }
     return { customConfig: {}, options: {} };
+}
+
+export function generateRandomColor() {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
 }
 
 export function customParse(customConfig: CustomConfig, key: string, value: any) {
@@ -43,4 +52,9 @@ export function resolveGraphTitle(customConfig: CustomConfig, key: string) {
 
 export function resolveParseCustomConfigKeysOnly(customConfigOptions: CustomConfigOptions) {
     return customConfigOptions?.parseCustomConfigKeysOnly || false;
+}
+
+export function resolveGraphColors(customConfig: CustomConfig, key: string) {
+    const res = readPath(customConfig, key);
+    return res?.graphColor || generateRandomColor();
 }

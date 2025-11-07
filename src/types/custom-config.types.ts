@@ -3,6 +3,7 @@ type KeyOptions = {
     title: string;
     graphType: string;
     graphMode: string;
+    graphColor: string;
 };
 
 export type CustomConfig = {
