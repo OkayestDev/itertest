@@ -10,7 +10,10 @@ import {
     resolveGraphMode,
     resolveGraphTitle,
     resolveGraphType,
+    resolveGroupName,
 } from "./custom-config.utils";
+import { randomUUID } from "crypto";
+import { PlotlyData } from "../types/plotly.types";
 
 const PLOTLY_VERSION = "3.1.2";
 
@@ -18,7 +21,7 @@ const GRAPH_TEMPLATE = `<div id="{{id}}" style="height: fit-content;"></div>
     <script>
       Plotly.newPlot(
         document.getElementById('{{id}}'), 
-        [{{data}}], 
+        {{data}}, 
         {{layout}},
         { responsive: true, displayModeBar: false }
       );
@@ -32,6 +35,28 @@ const HTML_TEMPLATE = `<html>
     {{graphTemplates}}
   </body>
 </html>`;
+
+function constructPlotlyData(
+    customConfig: CustomConfig,
+    data: Record<string, any[]>,
+    scalar: string,
+): PlotlyData {
+    return data[scalar].reduce(
+        (acc: { x: number[]; y: number[] }, value: number, index: number) => ({
+            ...acc,
+            x: [...acc.x, index],
+            y: [...acc.y, customParse(customConfig, scalar, value)],
+        }),
+        {
+            x: [],
+            y: [],
+            type: resolveGraphType(customConfig, scalar),
+            mode: resolveGraphMode(customConfig, scalar),
+            name: resolveGraphTitle(customConfig, scalar),
+            line: { color: resolveGraphColors(customConfig, scalar) },
+        } as PlotlyData,
+    );
+}
 
 export function renderGraphs(
     customConfig: CustomConfig,
@@ -52,33 +77,38 @@ export function renderGraphs(
         }
     }
 
-    for (const scalar in data) {
-        const constructedData = data[scalar].reduce(
-            (acc: { x: number[]; y: number[] }, value: number, index: number) => ({
-                ...acc,
-                x: [...acc.x, index],
-                y: [...acc.y, customParse(customConfig, scalar, value)],
-            }),
-            {
-                x: [],
-                y: [],
-                type: resolveGraphType(customConfig, scalar),
-                mode: resolveGraphMode(customConfig, scalar),
-                name: scalar,
-                line: { color: resolveGraphColors(customConfig, scalar) },
-            },
-        );
+    const groups: Record<string, PlotlyData[]> = {};
+    const ungroupedData: PlotlyData[] = [];
 
+    for (const scalar in data) {
+        const groupName = resolveGroupName(customConfig, scalar);
+
+        if (groupName) {
+            if (!groups[groupName]) {
+                groups[groupName] = [];
+            }
+
+            groups[groupName].push(constructPlotlyData(customConfig, data, scalar));
+        } else {
+            ungroupedData.push(constructPlotlyData(customConfig, data, scalar));
+        }
+    }
+
+    for (const groupName in groups) {
         graphs.push(
-            GRAPH_TEMPLATE.replaceAll("{{id}}", scalar)
-                .replaceAll("{{data}}", JSON.stringify(constructedData))
+            GRAPH_TEMPLATE.replaceAll("{{id}}", randomUUID())
+                .replaceAll("{{data}}", JSON.stringify(groups[groupName]))
+                .replaceAll("{{layout}}", JSON.stringify({ title: { text: groupName } })),
+        );
+    }
+
+    for (const data of ungroupedData) {
+        graphs.push(
+            GRAPH_TEMPLATE.replaceAll("{{id}}", randomUUID())
+                .replaceAll("{{data}}", JSON.stringify([data]))
                 .replaceAll(
                     "{{layout}}",
-                    JSON.stringify({
-                        title: {
-                            text: resolveGraphTitle(customConfig, scalar),
-                        },
-                    }),
+                    JSON.stringify({ title: { text: resolveGraphTitle(customConfig, data.name) } }),
                 ),
         );
     }

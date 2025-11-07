@@ -50,6 +50,11 @@ export function resolveGraphTitle(customConfig: CustomConfig, key: string) {
     return res?.title || key;
 }
 
+export function resolveGroupName(customConfig: CustomConfig, key: string): string | undefined {
+    const res = readPath(customConfig, key);
+    return res?.groupName || undefined;
+}
+
 export function resolveParseCustomConfigKeysOnly(customConfigOptions: CustomConfigOptions) {
     return customConfigOptions?.parseCustomConfigKeysOnly || false;
 }

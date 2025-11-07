@@ -4,6 +4,7 @@ type KeyOptions = {
     graphType: string;
     graphMode: string;
     graphColor: string;
+    groupName: string;
 };
 
 export type CustomConfig = {

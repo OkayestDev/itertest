@@ -3,11 +3,10 @@ import { CustomConfig } from "../../types/custom-config.types";
 export default {
     requests: {
         parser: (value: string | number) => Number(value),
-        title: "Requests",
-        graphType: "bar",
-        graphColor: "#1f77b4",
+        groupName: "Req",
     },
     "request-rate": {
         parser: (value: string) => Number(value.split("/s")[0]),
+        groupName: "Req",
     },
 } as CustomConfig;

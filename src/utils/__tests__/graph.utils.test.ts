@@ -19,4 +19,24 @@ describe("graph.utils", () => {
         expect(fs.existsSync(htmlFilePath)).toBe(true);
         fs.rmSync(testDir, { recursive: true, force: true });
     });
+
+    it.only("should generate grouped graphs", () => {
+        const TEST_NAME = "jest-graph-test-grouped";
+        const testDir = fsUtils.initializeTest(TEST_NAME);
+        fsUtils.incrementTest(
+            TEST_NAME,
+            `${__dirname}/../../__tests__/__fixtures__/json-schema-1.json`,
+        );
+        fsUtils.incrementTest(
+            TEST_NAME,
+            `${__dirname}/../../__tests__/__fixtures__/json-schema-2.json`,
+        );
+        const htmlFilePath = generateGraph(TEST_NAME, {
+            selectedTest: TEST_NAME,
+            customConfigFile: `${__dirname}/../../__tests__/__fixtures__/grouped-custom-config.ts`,
+        }) as string;
+        expect(htmlFilePath).toBeDefined();
+        expect(fs.existsSync(htmlFilePath)).toBe(true);
+        fs.rmSync(testDir, { recursive: true, force: true });
+    });
 });
